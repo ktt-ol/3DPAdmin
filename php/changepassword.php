@@ -1,29 +1,6 @@
 <?php
 require 'functions.php';
 require 'sessions.php';
-/* 
- * The MIT License
- *
- * Copyright 2018 arneh.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
 
 $error_msg = "";
 
@@ -45,13 +22,17 @@ if (
             // Generate new Password with salted hash
             $random_salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), TRUE));
             $password_new_to_db = hash('sha512', $password_new . $random_salt);
-
+            
             // Place session information for LogIn-Tracking
             $browser = $_SERVER['HTTP_USER_AGENT'];
 
-            // Put in the new password
-            $insert_stmt = ("UPDATE `userbase` SET `password` = $password_new_to_db AND SET `salt` = $random_salt WHERE `userbase`.`username` = $editedby");            
-            if (mysqli_query($mysqli, $insert_stmt)) {
+            // Put in the new password        
+            $update = "UPDATE `userbase` SET "
+                    . "`password` = '$password_new_to_db', "
+                    . "`salt` = '$random_salt' "
+                    . "WHERE `userbase`.`username` = '$editedby';";
+            
+            if (mysqli_query($mysqli, $update)) {
                 $_SESSION['login_string'] = hash('sha512',$password_new_to_db.$browser);
                 header('Location: /index.php?s=changepassword&success=passwordchanged');
 
