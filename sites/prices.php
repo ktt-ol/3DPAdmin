@@ -17,11 +17,10 @@ function get_prices($mysqli){
         $stmt->free();
     }
     foreach ($prices as $row){
-      if($row!=NULL)
+      if($row!=NULL && $row['RID'] != "0")
       echo '<tr>
-      <th scope="row">'.$row['RID'].'</th>
       <td>'.$row['name'].'</td>
-      <td>'.$row['pricepergramm'].' g</td>
+      <td>'.($row['pricepergramm']/100).' €</td>
     </tr>';
     }    
 }
@@ -33,7 +32,6 @@ function get_prices($mysqli){
 <!--Table head-->
   <thead>
     <tr>
-      <th>Rang</th>
       <th>Name</th>
       <th>Spendenvorschlag</th>
     </tr>
