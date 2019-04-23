@@ -29,10 +29,15 @@ Dashboard
       Neuen 3D-Druck
     </a>
   </li>
+  <li class="nav-item">   
+      <a class="nav-link isDisabled" href="/index.php?s=creditprint">
+      Guthaben 3D-Druck
+    </a>
+  </li>
 <?php endif; if(chk_rights($mysqli, OP_OP) == true):?>
   <hr />
   <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=addprinter">
+      <a class="nav-link isDisabled" href="/index.php?s=addprinter">
       Drucker hinzufügen
     </a>
   </li>
@@ -42,18 +47,18 @@ Dashboard
     </a>
   </li>
   <hr />
-  <li class="nav-item">   
+  <li class="nav-item isDisabled">   
       <a class="nav-link" href="/index.php?s=filament">
       Filament-Verwaltung
     </a>
   </li>
   <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=filament">
+      <a class="nav-link isDisabled" href="/index.php?s=credits">
       Guthaben-Verwaltung
     </a>
   </li>
   <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=filament">
+      <a class="nav-link" href="/index.php?s=editprices">
       Selbstkosten-Verwaltung
     </a>
   </li>

@@ -12,6 +12,16 @@ function rdm_string($length = 10) {
     return $pass;
 }
 
+function get_current_credit($sess,$mysqli){
+    $uid = $sess['uid'];
+    if ($stmt = $mysqli->prepare("SELECT `value` FROM `credit` WHERE `userid` = '$uid' LIMIT 1")) {
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($free_print_value);
+        $stmt->fetch();
+    }
+    return $free_print_value;
+}
 function chksite($name){
     $site_folder = 'sites/';
     $name = filter_var($name, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -198,7 +208,7 @@ function get_category($mysqli, $cat){
         $checked ='';
         if($cat == $group['RID'])
             $checked = "checked";
-        if($categories[$n]!= NULL && $group['name'] != "NOT_DEFINED"){
+        if($categories[$n]!= NULL && $group['name'] != "NOT_DEFINED" && $group['name'] != "Operator-Admin" && $group['name'] != "Administrator"){
             echo "<label for=\"radios-$n\">"
                 . "<input type=\"radio\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" $checked />"
                 . " ".$group['name']." (".$group['pricepergramm']." ct/g)"

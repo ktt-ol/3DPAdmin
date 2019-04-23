@@ -5,6 +5,22 @@ include $_SERVER['DOCUMENT_ROOT'].'/php/config.php';
 class prints{    
     function __construct(){
     }
+    function get_userid($user){
+        $query ="SELECT `UID` FROM `userbase` WHERE `username` = '$user'";
+        if ($stmt = $this->mysqlquery($query))
+        {   
+            $uid = $stmt['UID'];
+        }   
+        return $uid ;
+    }
+    function upgrade_balance($mysqli,$uid,$value,$__MULTIPLICATOR){
+        $updatevalue = $value*$__MULTIPLICATOR;
+        $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
+        if (mysqli_query($mysqli,$query))
+        {   
+            return true ;
+        }           
+    }
     
     public function filter($string){
         return filter_var($string, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -67,8 +83,13 @@ class prints{
                 $data['filament']."', '".
                 $data['printer']."', CURRENT_TIMESTAMP, '".$data['description']."');";
         if($mysqli->query($query_history)){
-            $url = "/?s=history";
-            header("Location: $url");
+            ////////////////////////////////////////////
+            // Hinzugüfen von Guthaben für den Operator            
+            $uid = $this->get_userid($data['operator']);
+            if($this->upgrade_balance($mysqli,$uid,$data['weight'],1)){
+                $url = "/?s=history";
+                header("Location: $url");
+            }
         }else{
             echo 'error';
         }
