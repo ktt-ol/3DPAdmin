@@ -82,4 +82,8 @@ Dashboard
     </a>
   </li>
 <?php endif;?>
+  <hr />
+  <li class="nav-item">
+      <p class="badge-light">Software-Version: <br/><?php echo $version?> </p>     
+  </li>
 </ul>

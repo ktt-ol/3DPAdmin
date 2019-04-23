@@ -1,8 +1,8 @@
-<?php require 'php/sessions.php';?>
+<?php require 'php/sessions.php'; require_once './version.php';?>
 <!doctype html>
 <?php 
     include_once 'php/functions.php';    
-    $site = $_GET['s'];  
+    $site = @$_GET['s'];  
     if($site == NULL || $site == 'dashboard')
         $site = 'dashboard';
 ?>
