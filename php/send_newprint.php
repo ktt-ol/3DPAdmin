@@ -14,7 +14,8 @@ class prints{
         return $uid ;
     }
     function update_balance($mysqli,$uid,$value,$__MULTIPLICATOR){
-        $updatevalue = $value*$__MULTIPLICATOR;
+        $updatevalue = $this->filter($value)*$this->filter($__MULTIPLICATOR);
+        
         $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
         if (mysqli_query($mysqli,$query))
         {   
@@ -24,7 +25,7 @@ class prints{
     function update_user_lastprint($mysqli,$uid){
         date_default_timezone_set('Europa/Berlin');
         $timestamp = date('Y-m-d H:i:s');
-   
+        $uid = $this->filter($uid);
         $query ="UPDATE `userbase` SET `lastprint` = CURRENT_TIMESTAMP WHERE `userbase`.`UID` = $uid;";
         if (mysqli_query($mysqli,$query))
         {   
