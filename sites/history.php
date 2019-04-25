@@ -5,6 +5,13 @@ if (login_check($mysqli) != true)
         header($url);
     }    
     
+function get_member_group($mysqli,$cat){
+    $query = "SELECT `name` FROM `ranks` WHERE `RID`= $cat LIMIT 1";
+    $result = mysqli_query($mysqli, $query);
+    $group = mysqli_fetch_assoc($result);
+    return $group['name'];
+}
+    
 function get_history($mysqli){
     $query ="SELECT "
             . "`PID`,"
@@ -26,21 +33,28 @@ function get_history($mysqli){
         }
         $stmt->free();
     }
+    $sumweight = 0;
+    $sumprice = 0;
+    $table = "";
     foreach ($history as $row){
-      if($row!=NULL)
-      echo '<tr>
-      <th scope="row">'.$row['PID'].'</th>
-      <td>'.$row['username'].'</td>
-      <td>'.$row['operator'].'</td>
-      <td>'.$row['weight'].' g</td>
-      <td>'.$row['pricecat'].'</td>
-      <td>'.$row['price'].' &euro;</td>
-      <td>'.$row['filament'].'</td>
-      <td>'.$row['printer'].'</td>
-      <td>'.$row['printedat'].'</td>
-      <td>'.$row['description'].'</td>
+      if($row!=NULL){
+      $table .= '<tr><th scope="row">'.$row['PID'].'</th><td>'.$row['username'].'</td>
+      <td>'.$row['operator'].'</td><td>'.$row['description'].'</td><td>'.get_member_group($mysqli, $row['pricecat']).'</td>
+      <td>'.$row['weight'].' g</td><td>'.$row['price'].' &euro;</td><td>'.$row['filament'].'</td>
+      <td>'.$row['printer'].'</td><td>'.$row['printedat'].'</td>      
     </tr>';
+      $sumweight += $row['weight'];
+      $sumprice += $row['price'];
+      }
+
     }
+    $summe =  '<tr style="background-color:#eeeeee"><th scope="row">&nbsp;</th><td>&nbsp;</td>
+      <td>&nbsp;</td><td>&nbsp;</td><td><b>Summe:</b></td>
+      <td>'.$sumweight.' g</td><td>'.$sumprice.' &euro;</td><td>&nbsp;</td>
+      <td>&nbsp;</td><td>&nbsp;</td>      
+    </tr>';
+    echo $summe.$table;
+    
 }
 
 ?>
@@ -54,13 +68,13 @@ function get_history($mysqli){
       <th>#</th>
       <th>Eigentümer</th>
       <th>Operator</th>
+      <th>Beschreibung</th>
+      <th>Kategorie</th>   
       <th>Gewicht</th>
-      <th>Kategorie</th>
       <th>Spendenvorschlag</th>
       <th>Filament</th>
       <th>Drucker</th>
-      <th>Zeit</th>
-      <th>Beschreibung</th>
+      <th>Zeit</th>      
     </tr>
   </thead>
   <!--Table head-->

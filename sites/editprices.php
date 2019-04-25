@@ -1,5 +1,6 @@
 <?php
 if (login_check($mysqli) != true){   $url = "Location: /index.php?s=e403";header($url);} 
+if (chk_rights($mysqli,OP_OP) != true){$url = "Location: /index.php?s=e403";header($url);}
 
 function get_prices($mysqli){
     $op = OP_OP;

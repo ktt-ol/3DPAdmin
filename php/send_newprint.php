@@ -13,9 +13,19 @@ class prints{
         }   
         return $uid ;
     }
-    function upgrade_balance($mysqli,$uid,$value,$__MULTIPLICATOR){
+    function update_balance($mysqli,$uid,$value,$__MULTIPLICATOR){
         $updatevalue = $value*$__MULTIPLICATOR;
         $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
+        if (mysqli_query($mysqli,$query))
+        {   
+            return true ;
+        }           
+    }
+    function update_user_lastprint($mysqli,$uid){
+        date_default_timezone_set('Europa/Berlin');
+        $timestamp = date('Y-m-d H:i:s');
+   
+        $query ="UPDATE `userbase` SET `lastprint` = CURRENT_TIMESTAMP WHERE `userbase`.`UID` = $uid;";
         if (mysqli_query($mysqli,$query))
         {   
             return true ;
@@ -83,13 +93,15 @@ class prints{
                 $data['filament']."', '".
                 $data['printer']."', CURRENT_TIMESTAMP, '".$data['description']."');";
         if($mysqli->query($query_history)){
+            
             ////////////////////////////////////////////
-            // Hinzugüfen von Guthaben für den Operator            
+            // Add Credits to the Operators-Account      
             $uid = $this->get_userid($data['operator']);
-            if($this->upgrade_balance($mysqli,$uid,$data['weight'],1)){
+            if($this->update_balance($mysqli,$uid,$data['weight'],1)&& $this->update_user_lastprint($mysqli,$uid)){
                 $url = "/?s=history";
                 header("Location: $url");
             }
+            #
         }else{
             echo 'error';
         }
