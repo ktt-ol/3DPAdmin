@@ -1,6 +1,44 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/php/config.php';
 
+function mysqlquery($query){
+  
+        $connect = mysqli_connect(
+                MYSQLI_HOST, 
+                MYSQLI_USER, 
+                MYSQLI_PASS, 
+                MYSQLI_BASE);
+        
+        if(!$connect){
+            echo mysqli_error($connect);
+            echo 'NO CONNECTION TO DATABASE';
+        }
+        elseif ($connect) { 
+            //echo 'DB OK';   
+            return mysqli_fetch_array(mysqli_query($connect, $query));
+        }
+        else{
+            echo 'UNDEFINED ERROR';
+        }
+    }
+
+function userid($user){
+        $query ="SELECT `UID` FROM `userbase` WHERE `username` = '$user'";
+        if ($stmt = mysqlquery($query))
+        {   
+            $uid = $stmt['UID'];
+        }   
+        return $uid ;
+    }
+function username($userid){
+        $query ="SELECT `username` FROM `userbase` WHERE `UID` = '$user'";
+        if ($stmt = mysqlquery($query))
+        {   
+            $username = $stmt['username'];
+        }   
+        return $username ;
+    }
+
 function rdm_string($length = 10) {
     $pass="";
     $n = 0 ;

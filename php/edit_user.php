@@ -19,7 +19,7 @@ function newpw($mysqli,$UID){
 
 $ID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $UID = filter_input(INPUT_POST, 'UID-'.$ID, FILTER_SANITIZE_NUMBER_INT);
-$username = filter_input(INPUT_POST, 'username-'.$UID, FILTER_SANITIZE_STRING);
+$username = strtolower(filter_input(INPUT_POST, 'username-'.$UID, FILTER_SANITIZE_STRING));
 $rank = filter_input(INPUT_POST, 'rank-'.$UID, FILTER_SANITIZE_NUMBER_INT);
 $activ = filter_input(INPUT_POST, 'activ-'.$UID, FILTER_SANITIZE_STRING);
 $confirm = filter_input(INPUT_POST, 'confirm-'.$UID, FILTER_SANITIZE_STRING);

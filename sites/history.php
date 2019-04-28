@@ -23,8 +23,9 @@ function get_history($mysqli){
             . " `filament`,"
             . " `printer`,"
             . " `printedat`,"
-            . " `description`"
-            . " FROM `history` ORDER BY `history`.`printedat` DESC";
+            . " `description`,"
+            . " `is_creditprint`"
+            . " FROM `history` ORDER BY `history`.`PID` DESC";
     if ($stmt = $mysqli->query($query))
     {   
         $n =0;
@@ -37,8 +38,10 @@ function get_history($mysqli){
     $sumprice = 0;
     $table = "";
     foreach ($history as $row){
+      $creditstyle = "";
+      if($row['is_creditprint'] == 1){$creditstyle = "style=\"background-color: #ddffdd\"";}
       if($row!=NULL){
-      $table .= '<tr><th scope="row">'.$row['PID'].'</th><td>'.$row['username'].'</td>
+      $table .= '<tr '.$creditstyle.'><th scope="row">'.$row['PID'].'</th><td>'.$row['username'].'</td>
       <td>'.$row['operator'].'</td><td>'.$row['description'].'</td><td>'.get_member_group($mysqli, $row['pricecat']).'</td>
       <td>'.$row['weight'].' g</td><td>'.$row['price'].' &euro;</td><td>'.$row['filament'].'</td>
       <td>'.$row['printer'].'</td><td>'.$row['printedat'].'</td>      

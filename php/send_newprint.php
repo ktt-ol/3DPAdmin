@@ -10,8 +10,20 @@ class prints{
         if ($stmt = $this->mysqlquery($query))
         {   
             $uid = $stmt['UID'];
-        }   
+        }else{
+            $uid = NULL;
+        }  
         return $uid ;
+    }
+    function get_username($userid){
+        $query ="SELECT `username` FROM `userbase` WHERE `UID` = '$user' LIMIT 1";
+        if ($stmt = mysqlquery($query))
+        {   
+            $username = $stmt['username'];
+        }else{
+            $username = NULL;
+        }
+        return $username ;
     }
     function update_balance($mysqli,$uid,$value,$__MULTIPLICATOR){
         $updatevalue = $this->filter($value)*$this->filter($__MULTIPLICATOR);
@@ -80,12 +92,26 @@ class prints{
         $calculated = round($calculated/100, 2);        
         return $calculated;
     }
-    public function save_print($mysqli,$post){
+    public function save_print($mysqli,$post,$is_creditprint = 0){
         $data = $this->get_print($post);
-        $query_history =
+        if($is_creditprint == 1){
+            $query_history =
+            "   INSERT INTO `history` 
+                (`username`, `operator`, `weight`, `pricecat`, `price`, `filament`, `printer`, `printedat`, `description`,`is_creditprint`) 
+                VALUES  ('".
+                $data['customer']."', '".
+                $data['operator']."', '".
+                $data['weight']."', '".
+                $data['pricecat']."', '".
+                $this->get_price($post)."', '".
+                $data['filament']."', '".
+                $data['printer']."', CURRENT_TIMESTAMP, '".
+                $data['description']."', '1');";
+        }else{
+            $query_history =
             "   INSERT INTO `history` 
                 (`username`, `operator`, `weight`, `pricecat`, `price`, `filament`, `printer`, `printedat`, `description`) 
-        VALUES  ('".
+                VALUES  ('".
                 $data['customer']."', '".
                 $data['operator']."', '".
                 $data['weight']."', '".
@@ -93,16 +119,38 @@ class prints{
                 $this->get_price($post)."', '".
                 $data['filament']."', '".
                 $data['printer']."', CURRENT_TIMESTAMP, '".$data['description']."');";
+        }
         if($mysqli->query($query_history)){
-            
-            ////////////////////////////////////////////
-            // Add Credits to the Operators-Account      
-            $uid = $this->get_userid($data['operator']);
-            if($this->update_balance($mysqli,$uid,$data['weight'],1)&& $this->update_user_lastprint($mysqli,$uid)){
-                $url = "/?s=history";
-                header("Location: $url");
-            }
-            #
+            if($is_creditprint == 1){
+                ////////////////////////////////////////////
+                // Remove Credits from the Operators-Account   
+                if(  $this->update_balance($mysqli,$uid,(-$data['weight']),1)&& 
+                        $this->update_user_lastprint($mysqli,$uid))
+                {
+                    $url = "/?s=history"; 
+                    header("Location: $url"); 
+                }
+            } else {
+                ////////////////////////////////////////////
+                // Add Credits to the Operators-Account      
+                $uid = $this->get_userid($data['operator']);
+                $c_id = $this->get_userid($data['customer']);
+                var_dump($c_id.'.'.$uid);
+                if($uid != $c_id){
+                    if(  $this->update_balance($mysqli,$uid,$data['weight'],1)&& 
+                        $this->update_user_lastprint($mysqli,$uid))
+                    {
+                        $url = "/?s=history"; 
+                        header("Location: $url"); 
+                    }
+                }else{
+                    if($this->update_user_lastprint($mysqli,$uid))
+                    {
+                        $url = "/?s=history"; 
+                        header("Location: $url"); 
+                    }
+                }
+            }           
         }else{
             echo 'error';
         }

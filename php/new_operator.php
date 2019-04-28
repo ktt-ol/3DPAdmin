@@ -15,7 +15,7 @@ function get_next_uid($mysqli){
 }
  
 if (isset($_POST['username'])) {
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $username = strtolower(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
     $opedby = $_SESSION['user'];
     $activ = filter_input(INPUT_POST, 'activ', FILTER_SANITIZE_NUMBER_INT);
     $prep_stmt = "SELECT UID FROM userbase WHERE username = ? LIMIT 1";
