@@ -27,7 +27,7 @@ function get_next_printerid($mysqli){
     <div class="form-group">
       <label class="col-md-4 control-label" for="owner">Owner</label>  
       <div class="col-md-4">
-        <input id="owner" name="owner" type="text" value="KtT e.V." class="form-control input-md">
+        <input id="owner" name="owner" type="text" placeholder="KtT e.V." class="form-control input-md">
       </div>
     </div>
 
@@ -41,7 +41,7 @@ function get_next_printerid($mysqli){
           <option value="0.25">0.25 mm</option>
           <option value="0.30">0.30 mm</option>
           <option value="0.35">0.35 mm</option>
-          <option value="0.40">0.40 mm</option>
+          <option value="0.40" selected="selected">0.40 mm</option>
           <option value="0.45">0.45 mm</option>
           <option value="0.50">0.50 mm</option>
           <option value="0.55">0.55 mm</option>
@@ -53,7 +53,7 @@ function get_next_printerid($mysqli){
       <label class="col-md-4 control-label" for="filamentdia">Filament-Diameter</label>
       <div class="col-md-4">
         <select id="filamentdia" name="filamentdia" class="form-control">
-          <option value="1.75">1.75 mm</option>
+          <option value="1.75" selected="selected">1.75 mm</option>
           <option value="2.85">2.85 mm</option>
           <option value="3.00">3.00 mm</option>
         </select>
@@ -80,10 +80,10 @@ function get_next_printerid($mysqli){
         </div>
     </div>
     
-    <div class="form-group">
+<!--    <div class="form-group">
       <label class="col-md-4 control-label" for="features">Features</label>
       <div class="col-md-4">
-        <select id="features" name="features" class="form-control" multiple="multiple">
+        <select id="features" name="features[]" class="form-control" multiple="multiple">
           <option value="1">Gear-Extruder</option>
           <option value="2">Direct-Drive</option>
           <option value="3">Bowden</option>
@@ -93,12 +93,12 @@ function get_next_printerid($mysqli){
           <option value="7">Octoprint</option>
         </select>
       </div>
-    </div>
+    </div>-->
 
     <div class="form-group">
-      <label class="col-md-4 control-label" for="selectbasic">Status</label>
+      <label class="col-md-4 control-label" for="status">Status</label>
       <div class="col-md-4">
-        <select id="selectbasic" name="selectbasic" class="form-control">
+        <select id="status" name="status" class="form-control">
           <option value="0">undefined</option>
           <option value="1">L&auml;uft</option>
           <option value="2">Kleiner Defekt</option>
@@ -110,16 +110,16 @@ function get_next_printerid($mysqli){
     </div>
 
     <div class="form-group">
-      <label class="col-md-4 control-label" for="descp">Description and Extras</label>
+      <label class="col-md-4 control-label" for="description">Description and Extras</label>
       <div class="col-md-4">                     
-        <textarea class="form-control" id="descp" name="descp">Brief description about the printer, results, extras or ticks the printer has</textarea>
+        <textarea class="form-control" id="description" name="description">Brief description about the printer, results, extras or ticks the printer has</textarea>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="col-md-4 control-label" for="issues">Momentary Issues</label>
+      <label class="col-md-4 control-label" for="defects">Momentary Issues</label>
       <div class="col-md-4">                     
-        <textarea class="form-control" id="issues" name="issues">If the printer has real issues, point it out here</textarea>
+        <textarea class="form-control" id="defects" name="defects">If the printer has real issues, point it out here</textarea>
       </div>
     </div>
   <div class="col-md-8">

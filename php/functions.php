@@ -300,7 +300,7 @@ function get_printer($mysqli,$printer){
         if($printer == $n)
             $checked == "selected";
         if($categories[$n]!= NULL){
-            echo "<option value=\"".$n."\" $checked>#00".$categories[$n]['PrID']." | &#8709 ".$categories[$n]['nozzle']." | ".$categories[$n]['owner']."</option>";
+            echo "<option value=\"".$n."\" $checked>".$categories[$n]['printername']." | &#8709 ".$categories[$n]['nozzle']." | ".$categories[$n]['owner']."</option>";
         }
         $n++;           
     }            

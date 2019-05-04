@@ -43,6 +43,7 @@ function convertstatus($status){
 function get_printers($mysqli){
     $query ="SELECT "
             . "`PrID`,"
+            . " `printername`,"
             . " `owner`,"
             . " `description`,"
             . " `xdim`,"
@@ -75,12 +76,13 @@ function get_printers($mysqli){
         $output .= '</select>';               
         if($row!=NULL)
         echo '<form action="/php/edit_printer.php?id='.$row['PrID'].'" method="post" class="form-horizontal"><tr>
-        <th scope="row"><input type="hidden" id="PrID" name="PrID-'.$row['PrID'].'" value="'.$row['PrID'].'">#00'.$row['PrID'].'</th>
+        <th scope="row"><input type="hidden" id="PrID" name="PrID-'.$row['PrID'].'" value="'.$row['PrID'].'">'.$row['PrID'].'</th>
+        <td><input class="form-control input-sm" type="text" name="printername-'.$row['PrID'].'" placeholder="'.$row['printername'].'" value="'.$row['printername'].'"/></td>    
         <td><input class="form-control input-sm" type="text" name="owner-'.$row['PrID'].'" placeholder="'.$row['owner'].'" value="'.$row['owner'].'"/></td>
         <td><input class="form-control input-sm" type="text" name="xdim-'.$row['PrID'].'" placeholder="'.$row['xdim'].'" value="'.$row['xdim'].'"/></td>
         <td><input class="form-control input-sm" type="text" name="ydim-'.$row['PrID'].'" placeholder="'.$row['ydim'].'" value="'.$row['ydim'].'"/></td>
         <td><textarea class="form-control" rows="3" name="description-'.$row['PrID'].'" placeholder="'.$row['description'].'" value="'.$row['description'].'">'.$row['description'].'</textarea></td>
-        <td><button type="submit" name="statusbtn-'.$row['PrID'].'" value="none" class="btn btn-'.convertstatus($row['status'])['type'].'">'.convertstatus($row['status'])['text'].'</button>'.$output.'</td> 
+        <td><button type="submit" name="status-'.$row['PrID'].'" value="none" class="btn btn-'.convertstatus($row['status'])['type'].'">'.convertstatus($row['status'])['text'].'</button>'.$output.'</td> 
         <td><textarea class="form-control" rows="3" name="nozzle-'.$row['PrID'].'">'.$row['nozzle'].'</textarea></td>
         <td><textarea class="form-control" rows="3" name="filament-'.$row['PrID'].'">'.$row['filament'].'</textarea></td>
         <td><textarea class="form-control" rows="3" name="defects-'.$row['PrID'].'">'.$row['defects'].'</textarea></td>
@@ -100,6 +102,7 @@ function get_printers($mysqli){
   <thead>
     <tr>
       <th>PrinterID</th>
+      <th>Printername</th>
       <th>Owner</th>
       <th>X-Dimension in mm</th>
       <th>Y-Dimension in mm</th>

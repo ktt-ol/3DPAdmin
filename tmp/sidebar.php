@@ -35,9 +35,9 @@ Dashboard
     </a>
   </li>
 <?php endif; if(chk_rights($mysqli, OP_OP) == true):?>
-  <hr />
+  <hr/>
   <li class="nav-item">   
-      <a class="nav-link isDisabled" href="/index.php?s=addprinter">
+      <a class="nav-link" href="/index.php?s=addprinter">
       Drucker hinzufügen
     </a>
   </li>
@@ -46,14 +46,13 @@ Dashboard
       Drucker verwalten
     </a>
   </li>
-  <hr />
   <li class="nav-item isDisabled">   
       <a class="nav-link" href="/index.php?s=filament">
       Filament-Verwaltung
     </a>
   </li>
   <li class="nav-item">   
-      <a class="nav-link isDisabled" href="/index.php?s=credits">
+      <a class="nav-link" href="/index.php?s=credits">
       Guthaben-Verwaltung
     </a>
   </li>
@@ -62,7 +61,6 @@ Dashboard
       Selbstkosten-Verwaltung
     </a>
   </li>
-  <hr />
   <li class="nav-item">
     <a class="nav-link" href="/index.php?s=newoperator">
       Neuen Operator erstellen
