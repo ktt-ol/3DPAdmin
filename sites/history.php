@@ -11,6 +11,20 @@ function get_member_group($mysqli,$cat){
     $group = mysqli_fetch_assoc($result);
     return $group['name'];
 }
+
+function get_printer_name($mysqli,$printerid){
+    $query = "SELECT 'printername' FROM `printer` WHERE `PrID` = $printerid LIMIT 1";
+    $result = mysqli_query($mysqli, $query);
+    $group = mysqli_fetch_assoc($result);
+    return $group['printername'];
+}
+
+function get_filament_name($mysqli,$FID){
+    $query = "SELECT `FID`,`name`,`color` FROM `filament` WHERE `FID` = $FID LIMIT 1";
+    $result = mysqli_query($mysqli, $query);
+    $group = mysqli_fetch_assoc($result);
+    return $group;
+}
     
 function get_history($mysqli){
     $query ="SELECT "
@@ -41,10 +55,11 @@ function get_history($mysqli){
       $creditstyle = "";
       if($row['is_creditprint'] == 1){$creditstyle = "style=\"background-color: #ddffdd\"";}
       if($row!=NULL){
+      $fila = get_filament_name($mysqli, $row['filament']);
       $table .= '<tr '.$creditstyle.'><th scope="row">'.$row['PID'].'</th><td>'.$row['username'].'</td>
       <td>'.$row['operator'].'</td><td>'.$row['description'].'</td><td>'.get_member_group($mysqli, $row['pricecat']).'</td>
-      <td>'.$row['weight'].' g</td><td>'.$row['price'].' &euro;</td><td>'.$row['filament'].'</td>
-      <td>'.$row['printer'].'</td><td>'.$row['printedat'].'</td>      
+      <td>'.$row['weight'].' g</td><td>'.$row['price'].' &euro;</td><td>'. $fila['FID'].' | '.$fila['name'].' | '.$fila['color'].'</td>
+      <td>'.get_printer_name($mysqli, $row['printer']).'</td><td>'.$row['printedat'].'</td>      
     </tr>';
       $sumweight += $row['weight'];
       $sumprice += $row['price'];

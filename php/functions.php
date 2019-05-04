@@ -323,8 +323,8 @@ function get_filament($mysqli, $filament){
         $checked ='';
         if($filament == $n)
             $checked == "selected";
-        if($categories[$n]!= NULL){
-            echo "<option value=\"".$n."\" $checked>".$categories[$n]['FID']." | ".$categories[$n]['weight']."g left | ".$categories[$n]['color']." | &#8709 ".$categories[$n]['thickness']." | ".$categories[$n]['owner']."</option>";
+        if($categories[$n]!= NULL&& $categories[$n]['weight'] >0) {
+            echo "<option value=\"".$categories[$n]['FID']."\" $checked>".$categories[$n]['FID']." | ".$categories[$n]['weight']."g left | ".$categories[$n]['color']." | &#8709 ".$categories[$n]['thickness']." | ".$categories[$n]['owner']."</option>";
         }
         $n++;           
     }            

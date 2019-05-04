@@ -27,15 +27,26 @@ class prints{
     }
     function update_balance($mysqli,$uid,$value,$__MULTIPLICATOR){
         $updatevalue = $this->filter($value)*$this->filter($__MULTIPLICATOR);
-        
-        $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
+        if($value>0){
+            $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
+        }elseif($value<=0){
+            $query ="UPDATE credit SET value = value - $updatevalue WHERE userid = '$uid'";
+        }
         if (mysqli_query($mysqli,$query))
         {   
             return true ;
         }           
     }
+    function update_filament($mysqli,$FID,$value){
+        $updatevalue = $this->filter($value);
+        $query ="UPDATE filament SET weight = weight - $updatevalue WHERE FID = '$FID'";
+        if (mysqli_query($mysqli,$query))
+        {   
+            return true ;
+        } 
+    }
     function update_user_lastprint($mysqli,$uid){
-        date_default_timezone_set('Europa/Berlin');
+        date_default_timezone_set('Europe/Berlin');
         $timestamp = date('Y-m-d H:i:s');
         $uid = $this->filter($uid);
         $query ="UPDATE `userbase` SET `lastprint` = CURRENT_TIMESTAMP WHERE `userbase`.`UID` = $uid;";
@@ -124,8 +135,12 @@ class prints{
             if($is_creditprint == 1){
                 ////////////////////////////////////////////
                 // Remove Credits from the Operators-Account   
-                if(  $this->update_balance($mysqli,$uid,(-$data['weight']),1)&& 
-                        $this->update_user_lastprint($mysqli,$uid))
+                $data['weight'] = $data['weight'] - 2*$data['weight'];
+                $uid = $this->get_userid($data['operator']);
+
+                if(  $this->update_balance($mysqli,$uid,$data['weight'],1)&& 
+                        $this->update_user_lastprint($mysqli,$uid) &&
+                        $this->update_filament($mysqli,$data['filament'],$data['weight']))
                 {
                     $url = "/?s=history"; 
                     header("Location: $url"); 
@@ -135,10 +150,10 @@ class prints{
                 // Add Credits to the Operators-Account      
                 $uid = $this->get_userid($data['operator']);
                 $c_id = $this->get_userid($data['customer']);
-                var_dump($c_id.'.'.$uid);
                 if($uid != $c_id){
                     if(  $this->update_balance($mysqli,$uid,$data['weight'],1)&& 
-                        $this->update_user_lastprint($mysqli,$uid))
+                        $this->update_user_lastprint($mysqli,$uid) &&
+                        $this->update_filament($mysqli,$data['filament'],$data['weight']))
                     {
                         $url = "/?s=history"; 
                         header("Location: $url"); 
@@ -159,12 +174,25 @@ class prints{
 
 if (isset($_POST['submit'])){
     $print = new prints;
-    $print->save_print($mysqli,$_POST);
+    if(isset($_GET['creditprint']) && $print->filter(@$_GET['creditprint'])==true){
+        $creditprint=1;
+    }
+    else
+    {
+        $creditprint=0;
+    }
+    $print->save_print($mysqli,$_POST,$creditprint);
     
 } elseif (isset($_POST['calc'])){
     $prints = new prints;
     $price = $prints->get_price($_POST);
     $data = $prints->get_print($_POST);
-    $url = "/index.php?s=newprint&p=$price&c=".$data['customer']."&op=".$data['operator']."&w=".$data['weight']."&pc=".$data['pricecat']."&f=".$data['filament']."&pr=".$data['printer']."&d=".$data['description'];    
+    if(isset($_GET['creditprint']) && $prints->filter(@$_GET['creditprint'])==true){
+        $url = "/index.php?s=creditprint&p=$price&c=".$data['customer']."&op=".$data['operator']."&w=".$data['weight']."&pc=".$data['pricecat']."&f=".$data['filament']."&pr=".$data['printer']."&d=".$data['description'];    
+    }
+    else
+    {
+        $url = "/index.php?s=newprint&p=$price&c=".$data['customer']."&op=".$data['operator']."&w=".$data['weight']."&pc=".$data['pricecat']."&f=".$data['filament']."&pr=".$data['printer']."&d=".$data['description'];    
+    }
     header("Location: $url");
 }

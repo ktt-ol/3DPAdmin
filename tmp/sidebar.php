@@ -30,7 +30,7 @@ Dashboard
     </a>
   </li>
   <li class="nav-item">   
-      <a class="nav-link isDisabled" href="/index.php?s=creditprint">
+      <a class="nav-link" href="/index.php?s=creditprint">
       Guthaben 3D-Druck
     </a>
   </li>
@@ -47,7 +47,7 @@ Dashboard
     </a>
   </li>
   <li class="nav-item isDisabled">   
-      <a class="nav-link" href="/index.php?s=filament">
+      <a class="nav-link" href="/index.php?s=managefilament">
       Filament-Verwaltung
     </a>
   </li>
