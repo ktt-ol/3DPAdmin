@@ -93,16 +93,23 @@ class prints{
         return $data;
         
     }
-    
+    public function get_multiplier($FID){
+        $query = "SELECT `multiplier` FROM `filament` WHERE `FID` = $FID LIMIT 1";
+        $result = $this->mysqlquery($query);
+        return $result['0'];
+    }
     public function get_price($post){
         $data = $this->get_print($post);
         $calc = "SELECT `pricepergramm` FROM `ranks` WHERE `RID` = '".$data['pricecat']."' LIMIT 1";      
         $weight = $data['weight'];
         $price = $this->mysqlquery($calc)['0'];
-        $calculated = $weight * $price;
+        $multiplier = $this->get_multiplier($data['filament']);
+
+        $calculated = $weight * $price * $multiplier;
         $calculated = round($calculated/100, 2);        
         return $calculated;
     }
+
     public function save_print($mysqli,$post,$is_creditprint = 0){
         $data = $this->get_print($post);
         if($is_creditprint == 1){
@@ -138,7 +145,7 @@ class prints{
                 $data['weight'] = $data['weight'] - 2*$data['weight'];
                 $uid = $this->get_userid($data['operator']);
 
-                if(  $this->update_balance($mysqli,$uid,$data['weight'],1)&& 
+                if(  $this->update_balance($mysqli,$uid,$data['weight'],$this->get_multiplier($data['filament']))&& 
                         $this->update_user_lastprint($mysqli,$uid) &&
                         $this->update_filament($mysqli,$data['filament'],$data['weight']))
                 {
@@ -151,7 +158,7 @@ class prints{
                 $uid = $this->get_userid($data['operator']);
                 $c_id = $this->get_userid($data['customer']);
                 if($uid != $c_id){
-                    if(  $this->update_balance($mysqli,$uid,$data['weight'],1)&& 
+                    if(  $this->update_balance($mysqli,$uid,$data['weight'],$this->get_multiplier($data['filament']))&& 
                         $this->update_user_lastprint($mysqli,$uid) &&
                         $this->update_filament($mysqli,$data['filament'],$data['weight']))
                     {

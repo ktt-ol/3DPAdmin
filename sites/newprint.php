@@ -57,7 +57,7 @@ if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header(
 </div>
 
 <div class="form-group">
-  <label class="col-md-4 control-label" for="filament">Filament</label>
+    <label class="col-md-4 control-label" for="filament">Filament<br/>ID | Weight left | Color | Diameter | Owner | Pricemultiplicator</label>
   <div class="col-md-4">
     <select id="filament" name="filament" class="form-control">
     <?php get_filament($mysqli, $filament)?>

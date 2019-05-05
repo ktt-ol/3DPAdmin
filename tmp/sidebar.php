@@ -46,7 +46,7 @@ Dashboard
       Drucker verwalten
     </a>
   </li>
-  <li class="nav-item isDisabled">   
+  <li class="nav-item">   
       <a class="nav-link" href="/index.php?s=managefilament">
       Filament-Verwaltung
     </a>

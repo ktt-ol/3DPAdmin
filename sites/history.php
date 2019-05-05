@@ -13,7 +13,7 @@ function get_member_group($mysqli,$cat){
 }
 
 function get_printer_name($mysqli,$printerid){
-    $query = "SELECT 'printername' FROM `printer` WHERE `PrID` = $printerid LIMIT 1";
+    $query = "SELECT printername FROM `printer` WHERE `PrID` = $printerid LIMIT 1";
     $result = mysqli_query($mysqli, $query);
     $group = mysqli_fetch_assoc($result);
     return $group['printername'];
