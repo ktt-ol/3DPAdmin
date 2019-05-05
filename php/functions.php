@@ -120,6 +120,114 @@ function bruteforce($uid, $mysqli) {
         }
     }
 }
+function get_printer_status(){
+    $SQL = "SELECT * FROM `printer` ORDER BY  PrID";
+    $connect = mysqli_connect(MYSQLI_HOST,MYSQLI_USER,MYSQLI_PASS,MYSQLI_BASE);    
+    if ($connect) { 
+        $result = mysqli_query($connect, $SQL);
+        for($i=0; $i<mysqli_num_rows($result); $i++) {
+            $allprinters[] = mysqli_fetch_assoc($result);
+        }
+    }
+    foreach($allprinters as $single_printer){
+        switch ($single_printer['status']) {
+            case 0:
+                echo "<div class=\"boxed\">"
+                    . "<h3>".$single_printer['printername']."</h3>"
+                    . "<h5><i>".$single_printer['owner']."</i></h5>"
+                    . "<div class=\"alert alert-dark\" role=\"alert\">Undefiniert"
+                    . "</div></div>";
+                break;
+            case 1:
+                echo "<div class=\"boxed\">"
+                    . "<h3>".$single_printer['printername']."</h3>"
+                    . "<h5><i>".$single_printer['owner']."</i></h5>"
+                    . "<div class=\"alert alert-success\" role=\"alert\">OK!"
+                    . "</div></div>";
+                break;
+            case 2:
+                echo "<div class=\"boxed\">"
+                    . "<h3>".$single_printer['printername']."</h3>"
+                    . "<h5><i>".$single_printer['owner']."</i></h5>"
+                    . "<div class=\"alert alert-warning\" role=\"alert\">Kleinere Defekte: ".$single_printer['defects']
+                    . "</div></div>";
+                break;
+            case 3:
+                echo "<div class=\"boxed\">"
+                    . "<h3>".$single_printer['printername']."</h3>"
+                    . "<h5><i>".$single_printer['owner']."</i></h5>"
+                    . "<div class=\"alert alert-danger\" role=\"alert\">Größere Defekte: ".$single_printer['defects']
+                    . "</div></div>";
+                break;
+            case 4:
+                echo "<div class=\"boxed\">"
+                    . "<h3>".$single_printer['printername']."</h3>"
+                    . "<h5><i>".$single_printer['owner']."</i></h5>"
+                    . "<div class=\"alert alert-dark\" role=\"alert\">OUT OF ORDER : ".$single_printer['defects']
+                    . "</div></div>";
+                break;
+            default:
+                echo "<div class=\"boxed\">"
+                . "<h2>".$single_printer['printername']."</h2>"
+                    . "<h5><i>".$single_printer['owner']."</i></h5>"
+                    . "<div class=\"alert alert-light\" role=\"alert\"> NaN"
+                    . "</div></div>";
+                break;
+        }
+                
+    }
+                       
+}
+function get_filament_status(){
+    $SQL = "SELECT * FROM `filament` ORDER BY weight";
+    $connect = mysqli_connect(MYSQLI_HOST,MYSQLI_USER,MYSQLI_PASS,MYSQLI_BASE);    
+    if ($connect) { 
+        $result = mysqli_query($connect, $SQL);
+        for($i=0; $i<mysqli_num_rows($result); $i++) {
+            $allfilaments[] = mysqli_fetch_assoc($result);
+        }
+    }
+    foreach ($allfilaments as $onefilaments) {
+        if($onefilaments['weight']>0)
+        echo "<tr>
+                  <td>".$onefilaments['FID']."</td>
+                  <td>".$onefilaments['name']."</td>
+                  <td>".$onefilaments['color']."</td>
+                  <td>".$onefilaments['weight']."</td>
+                  <td>".$onefilaments['diameter']."</td>
+                  <td>".$onefilaments['owner']."</td>
+                </tr>";
+                        
+    }
+}
+function get_lastprint_status(){
+    $SQL = "SELECT * FROM `history` ORDER BY PID DESC LIMIT 15";
+    $connect = mysqli_connect(MYSQLI_HOST,MYSQLI_USER,MYSQLI_PASS,MYSQLI_BASE);    
+    if ($connect) { 
+        $result = mysqli_query($connect, $SQL);
+        for($i=0; $i<mysqli_num_rows($result); $i++) {
+            $lasthistory[] = mysqli_fetch_assoc($result);
+        }
+    }
+    foreach ($lasthistory as $oneprint) {
+        if($oneprint['pricecat']!=0)
+        {   
+            $SQL = "SELECT printername FROM `printer` WHERE `PrID` =".$oneprint['printer'];
+            $result = mysqli_query($connect, $SQL);
+            $printername= mysqli_fetch_assoc($result)['printername'];
+            $d=new DateTime($oneprint['printdate']);            
+            echo "<tr>
+                  <td>".$oneprint['operator']."</td>
+                  <td>".$printername."</td>
+                  <td>".$oneprint['weight']." g</td>
+                  <td>".$d->format('d.m.Y')."&nbsp;&nbsp;&nbsp;".$d->format('H:i')."</td>
+                </tr>";
+            
+        }
+                        
+    }
+}
+
 
 function login_check($mysqli) {
     if (isset($_SESSION['uid'],$_SESSION['user'],$_SESSION['login_string']))
@@ -227,6 +335,7 @@ function chk_rights($mysqli , $rank = 0, $uid_ex = NULL){
     
     return TRUE;
 }
+
 
 
 // Printing functions

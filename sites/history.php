@@ -36,7 +36,7 @@ function get_history($mysqli){
             . " `price`,"
             . " `filament`,"
             . " `printer`,"
-            . " `printedat`,"
+            . " `printdate`,"
             . " `description`,"
             . " `is_creditprint`"
             . " FROM `history` ORDER BY `history`.`PID` DESC";
@@ -59,7 +59,7 @@ function get_history($mysqli){
       $table .= '<tr '.$creditstyle.'><th scope="row">'.$row['PID'].'</th><td>'.$row['username'].'</td>
       <td>'.$row['operator'].'</td><td>'.$row['description'].'</td><td>'.get_member_group($mysqli, $row['pricecat']).'</td>
       <td>'.$row['weight'].' g</td><td>'.$row['price'].' &euro;</td><td>'. $fila['FID'].' | '.$fila['name'].' | '.$fila['color'].'</td>
-      <td>'.get_printer_name($mysqli, $row['printer']).'</td><td>'.$row['printedat'].'</td>      
+      <td>'.get_printer_name($mysqli, $row['printer']).'</td><td>'.$row['printdate'].'</td>      
     </tr>';
       $sumweight += $row['weight'];
       $sumprice += $row['price'];

@@ -3,13 +3,9 @@
 <a class="nav-link active" href="/index.php">
 Dashboard 
 </a>
-</li>
+
 <?php if(login_check($mysqli) == true) :?>
-  <li class="nav-item">
-    <a class="nav-link" href="/index.php?s=history">
-      Historie
-    </a>
-  </li>
+  
   <li class="nav-item">
     <a class="nav-link" href="/index.php?s=prices">
       Selbstkosten-Infos
@@ -24,6 +20,11 @@ Dashboard
 
 <?php endif; if(chk_rights($mysqli, OP) == true):?>
   <hr />
+  <li class="nav-item">
+    <a class="nav-link" href="/index.php?s=history">
+      Historie
+    </a>
+  </li>
   <li class="nav-item">   
       <a class="nav-link" href="/index.php?s=newprint">
       Neuen 3D-Druck
@@ -56,11 +57,6 @@ Dashboard
       Guthaben-Verwaltung
     </a>
   </li>
-  <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=editprices">
-      Selbstkosten-Verwaltung
-    </a>
-  </li>
   <li class="nav-item">
     <a class="nav-link" href="/index.php?s=newoperator">
       Neuen Operator erstellen
@@ -86,7 +82,12 @@ Dashboard
   </li>
 <?php endif;?>
   <hr />
-  <li class="nav-item">
-      <p class="badge-light">Software-Version: <br/><?php echo $version?> </p>     
-  </li>
+
+</ul>
+<ul class="nav flex-column justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link alert-dark" href="">
+            Software-Version: <br/><?php echo $version?>
+        </a>  
+    </li>
 </ul>
