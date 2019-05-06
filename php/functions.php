@@ -194,7 +194,7 @@ function get_filament_status(){
                   <td>".$onefilaments['name']."</td>
                   <td>".$onefilaments['color']."</td>
                   <td>".$onefilaments['weight']."</td>
-                  <td>".$onefilaments['diameter']."</td>
+                  <td>".$onefilaments['thickness']."</td>
                   <td>".$onefilaments['owner']."</td>
                 </tr>";
                         
@@ -210,17 +210,17 @@ function get_lastprint_status(){
         }
     }
     foreach ($lasthistory as $oneprint) {
-        if($oneprint['pricecat']!=0)
+
+        if(true)
         {   
-            $SQL = "SELECT printername FROM `printer` WHERE `PrID` =".$oneprint['printer'];
+            $SQL = "SELECT `printername` FROM `printer` WHERE `PrID` =".$oneprint['printer'];
             $result = mysqli_query($connect, $SQL);
             $printername= mysqli_fetch_assoc($result)['printername'];
-            $d=new DateTime($oneprint['printdate']);            
             echo "<tr>
                   <td>".$oneprint['operator']."</td>
                   <td>".$printername."</td>
                   <td>".$oneprint['weight']." g</td>
-                  <td>".$d->format('d.m.Y')."&nbsp;&nbsp;&nbsp;".$d->format('H:i')."</td>
+                  <td>".$oneprint['printdate']."</td>
                 </tr>";
             
         }
@@ -433,7 +433,7 @@ function get_filament($mysqli, $filament){
         if($filament == $n)
             $checked == "selected";
         if($categories[$n]!= NULL&& $categories[$n]['weight'] >0) {
-            echo "<option value=\"".$categories[$n]['FID']."\" $checked>".$categories[$n]['FID']." | ".$categories[$n]['weight']."g left | ".$categories[$n]['color']." | &#8709 ".$categories[$n]['thickness']." | ".$categories[$n]['owner']." | ".$categories[$n]['multiplier']."</option>";
+            echo "<option value=\"".$categories[$n]['FID']."\" $checked>".$categories[$n]['FID']." | ".$categories[$n]['weight']."g left  | ".$categories[$n]['color']." | &#8709 ".$categories[$n]['thickness']." | ".$categories[$n]['owner']." | ".$categories[$n]['multiplier']."x</option>";
         }
         $n++;           
     }            
