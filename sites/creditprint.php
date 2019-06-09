@@ -13,6 +13,11 @@ if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header(
     }  
 ?>
 <legend>Guthaben 3D-Druck </legend>
+<nav class="nav nav-pills flex-column flex-sm-row">
+    <a class="flex-sm-fill text-sm-center nav-link" href="/sites/newprint.php">Extern/Member</a>
+    <a class="flex-sm-fill text-sm-center nav-link" href="/sites/newprint_operator.php">Eigendruck</a>
+    <a class="flex-sm-fill text-sm-center nav-link active" href="#">Guthabendruck</a>
+</nav>
 <div style="background-color: #ffdfdf;">
 <form action="<?php echo '/php/';?>send_newprint.php?creditprint=true" method="post" class="form-horizontal">
 <fieldset>

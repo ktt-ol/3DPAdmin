@@ -36,7 +36,7 @@ function get_history($mysqli){
             $lasthistory[] = mysqli_fetch_assoc($result);
         }
     }    
-    
+
     
     $sumweight = 0;
     $sumprice = 0;
@@ -47,7 +47,7 @@ function get_history($mysqli){
         if($row!=NULL){
         $fila = get_filament_name($mysqli, $row['filament']);
         $table .= '<tr '.$creditstyle.'><th scope="row">'.$row['PID'].'</th><td>'.$row['username'].'</td>
-        <td>'.$row['operator'].'</td><td>'.$row['description'].'</td><td>'.get_member_group($mysqli, $row['pricecat']).'</td>
+        <td>'.$row['operator'].'</td><td>'.$row['description'].'</td><td>'.badgegroup(get_member_group($mysqli, $row['pricecat'])).'</td>
         <td>'.$row['weight'].' g</td><td>'.$row['price'].' &euro;</td><td>'. $fila['FID'].' | '.$fila['name'].' | '.$fila['color'].'</td>
         <td>'.get_printer_name($mysqli, $row['printer']).'</td><td>'.$row['printdate'].'</td>      
       </tr>';

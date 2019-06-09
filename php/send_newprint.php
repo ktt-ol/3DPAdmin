@@ -223,7 +223,7 @@ class prints{
                 ////////////////////////////////////////////
                 // Remove Credits from the Operators-Account   
                 $uid = $this->get_userid($data['operator']);
-                if(  $this->update_balance($mysqli,$uid,$data['weight'],$this->get_multiplier($data['filament']))&& 
+                if($this->update_balance($mysqli,$uid,$data['weight'],$this->get_multiplier($data['filament']))&& 
                         $this->update_user_lastprint($mysqli,$uid) &&
                         $this->update_filament($mysqli,$data['filament'],$data['weight']))
                 {

@@ -26,13 +26,18 @@ Dashboard
     </a>
   </li>
   <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=newprint">
+      <a class="nav-link" href="/index.php?s=newprint&tag=extern">
       Neuen 3D-Druck
     </a>
   </li>
   <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=creditprint">
+      <a class="nav-link" href="/index.php?s=newprint&tag=credit">
       Guthaben 3D-Druck
+    </a>
+  </li>
+  <li class="nav-item">   
+      <a class="nav-link" href="/index.php?s=printer">
+      Drucker verwalten
     </a>
   </li>
 <?php endif; if(chk_rights($mysqli, OP_OP) == true):?>
@@ -40,11 +45,6 @@ Dashboard
   <li class="nav-item">   
       <a class="nav-link" href="/index.php?s=addprinter">
       Drucker hinzufügen
-    </a>
-  </li>
-  <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=printer">
-      Drucker verwalten
     </a>
   </li>
   <li class="nav-item">   
@@ -76,8 +76,13 @@ Dashboard
 <?php endif; if(chk_rights($mysqli, ADMIN) == true):?>
   <hr />
   <li class="nav-item">   
-      <a class="nav-link" href="/index.php?s=settings">
-      Ganz-spezieller-kram
+      <a class="nav-link" href="/index.php?s=all_user_data">
+      [ADMIN] Benutzerdaten
+    </a>
+  </li>
+  <li class="nav-item">   
+      <a class="nav-link" href="/index.php?s=groupcredits">
+      [ADMIN] Druckkonten
     </a>
   </li>
 <?php endif;?>

@@ -19,8 +19,8 @@ function get_prices($mysqli){
     foreach ($prices as $row){
       if($row!=NULL && $row['RID'] != "0")
       echo '<tr>
-      <td>'.$row['name'].'</td>
-      <td>'.($row['pricepergramm']/100).' €</td>
+      <td>'.badgegroup($row['name']).'</td>
+      <td>'.number_format(($row['pricepergramm']/100),2).' €</td>
     </tr>';
     }    
 }

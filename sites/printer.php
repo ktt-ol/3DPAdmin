@@ -1,6 +1,6 @@
 <?php
 if (login_check($mysqli) != true){   $url = "Location: /index.php?s=e403";header($url);} 
-if (chk_rights($mysqli,OP_OP) != true){$url = "Location: /index.php?s=e403";header($url);}
+if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header($url);}
 
 function convertstatus($status){
     array($return);
@@ -79,20 +79,22 @@ function get_printers($mysqli){
         <th scope="row"><input type="hidden" id="PrID" name="PrID-'.$row['PrID'].'" value="'.$row['PrID'].'">'.$row['PrID'].'</th>
         <td><input class="form-control input-sm" type="text" name="printername-'.$row['PrID'].'" placeholder="'.$row['printername'].'" value="'.$row['printername'].'"/></td>    
         <td><input class="form-control input-sm" type="text" name="owner-'.$row['PrID'].'" placeholder="'.$row['owner'].'" value="'.$row['owner'].'"/></td>
-        <td><input class="form-control input-sm" type="text" name="xdim-'.$row['PrID'].'" placeholder="'.$row['xdim'].'" value="'.$row['xdim'].'"/></td>
-        <td><input class="form-control input-sm" type="text" name="ydim-'.$row['PrID'].'" placeholder="'.$row['ydim'].'" value="'.$row['ydim'].'"/></td>
+        <!--<td><input class="form-control input-sm" type="text" name="xdim-'.$row['PrID'].'" placeholder="'.$row['xdim'].'" value="'.$row['xdim'].'"/></td>-->
+        <!--<td><input class="form-control input-sm" type="text" name="ydim-'.$row['PrID'].'" placeholder="'.$row['ydim'].'" value="'.$row['ydim'].'"/></td>-->
         <td><textarea class="form-control" rows="3" name="description-'.$row['PrID'].'" placeholder="'.$row['description'].'" value="'.$row['description'].'">'.$row['description'].'</textarea></td>
         <td><button type="submit" name="status-'.$row['PrID'].'" value="none" class="btn btn-'.convertstatus($row['status'])['type'].'">'.convertstatus($row['status'])['text'].'</button>'.$output.'</td> 
         <td><textarea class="form-control" rows="3" name="nozzle-'.$row['PrID'].'">'.$row['nozzle'].'</textarea></td>
         <td><textarea class="form-control" rows="3" name="filament-'.$row['PrID'].'">'.$row['filament'].'</textarea></td>
         <td><textarea class="form-control" rows="3" name="defects-'.$row['PrID'].'">'.$row['defects'].'</textarea></td>
         <td style="background-color: rgba(0,255,0,0.1)"><button type="submit" name="submit-'.$row['PrID'].'" value="edit" class="btn btn-success">Edit</button></td>
-        <td style="background-color: rgba(255,0,0,0.1)"><button type="submit" name="submit-'.$row['PrID'].'" value="delete" class="btn btn-danger">Delete</button></br></br>'
+        ';
+        if(chk_rights($mysqli,OP_OP) == true)
+        echo '<td style="background-color: rgba(255,0,0,0.1)"><button type="submit" name="submit-'.$row['PrID'].'" value="delete" class="btn btn-danger">Delete</button></br></br>'
          . '<div class="form-check"><input class="form-check-input" type="checkbox" value="delete" name="confirm-'.$row['PrID'].'" id="autoSizingCheck2 id-'.$row['PrID'].'">
             <label class="form-check-label" for="autoSizingCheck2 id-'.$row['PrID'].'">
           Sure?
-        </label></div></td>
-        </tr></form>';
+        </label></div></td>';
+        echo '  </tr></form>';
     }   
     return $n+2;
 }
@@ -100,19 +102,21 @@ function get_printers($mysqli){
 <h3>Printer</h3>
 <table id="tablePreview" class="table">
   <thead>
-    <tr>
+      <tr>
       <th>PrinterID</th>
       <th>Printername</th>
       <th>Owner</th>
-      <th>X-Dimension in mm</th>
-      <th>Y-Dimension in mm</th>
+      <!--<th>X-Dimension in mm</th>-->
+      <!--<th>Y-Dimension in mm</th>-->
       <th>Descripton</th>
       <th>Status</th>
       <th>Nozzle</th>
       <th>Filament</th>
       <th>Defects</th>
       <th>&nbsp;</th>
+     <?php if(chk_rights($mysqli,OP_OP) == true){?>
       <th>&nbsp;</th>
+     <?php  }?>
     </tr>
   </thead>
   <tbody>

@@ -1,6 +1,30 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/php/config.php';
-
+function errhandle($get){
+    
+    if(isset($get['success'])){
+        $msg = filter_var($get['success'], FILTER_SANITIZE_SPECIAL_CHARS);
+        echo  " <div class=\"alert alert-success\" role=\"alert\">
+                <strong>It worked!</strong> $msg 
+                <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+                <span aria-hidden=\"true\">&times;</span>
+                </button>
+                </div>";    
+    }
+    
+    if(isset($get['error'])||isset($get['err'])){
+        $msg = filter_var($get['error'], FILTER_SANITIZE_SPECIAL_CHARS);
+        if(empty($msg)){
+            $msg = filter_var($get['err'], FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+        echo "<div class=\"alert alert-danger\" role=\"alert\">
+            <strong>Oops!</strong> $msg 
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+            <span aria-hidden=\"true\">&times;</span>
+            </button>
+            </div>";
+    }   
+}
 function mysqlquery($query){
   
         $connect = mysqli_connect(
@@ -29,6 +53,24 @@ function userid($user){
             $uid = $stmt['UID'];
         }   
         return $uid ;
+    }
+function usergrp($user){
+        $query ="SELECT `rank` FROM `userbase` WHERE `username` = '$user'";
+        if ($stmt = mysqlquery($query))
+        {   
+            $rid = $stmt['rank'];
+            $query2 ="SELECT `rank` FROM `ranks` WHERE `RID` = '$rid'";
+            if ($stmt2 = mysqlquery($query2))
+            {
+                $power = $stmt2['rank'];
+            }
+            if($power > OP){
+                $query3 ="SELECT `RID` FROM `ranks` WHERE `rank` = '".OP."' ORDER BY RID DESC LIMIT 1 ";
+                $stmt3 = mysqlquery($query3);
+                $rid = $stmt3['RID'];
+            }
+        }   
+        return $rid ;
     }
 function username($userid){
         $query ="SELECT `username` FROM `userbase` WHERE `UID` = '$user'";
@@ -339,7 +381,7 @@ function chk_rights($mysqli , $rank = 0, $uid_ex = NULL){
 
 
 // Printing functions
-function get_category($mysqli, $cat){
+function get_category($mysqli, $cat, $block = 0 ){
     $query = "SELECT `RID`, `name`, `pricepergramm` FROM `ranks` WHERE 1 ORDER BY `ranks`.`rank` DESC";
     if ($stmt = $mysqli->query($query))
     {   
@@ -353,16 +395,24 @@ function get_category($mysqli, $cat){
     $n = 0;
     foreach ($categories as $group) {
         $checked ='';
-        if($cat == $group['RID'])
-            $checked = "checked";
+        if($cat == $group['RID']){
+            $checked = "checked=\"\"";
+        }
         if($categories[$n]!= NULL && $group['name'] != "NOT_DEFINED" && $group['name'] != "Operator-Admin" && $group['name'] != "Administrator"){
-            echo "<label for=\"radios-$n\">"
-                . "<input type=\"radio\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" $checked />"
-                . " ".$group['name']." (".$group['pricepergramm']." ct/g)"
+            if($block){
+                echo "<label for=\"radios-$n\">"
+                . "<input disabled=\"\" type=\"radio\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" $checked />"
+                . " ".badgegroup($group['name'],0)." (".$group['pricepergramm']." ct/g)"
                 . "</label></br>";
+            }else{
+                echo "<label for=\"radios-$n\">"
+                . "<input type=\"radio\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" $checked />"
+                . " ".badgegroup($group['name'],0)." (".$group['pricepergramm']." ct/g)"
+                . "</label></br>";
+            }
         }
         $n++;           
-    }
+    }      
     echo "</div>";
 }
 function get_ops($mysqli, $op){
@@ -382,8 +432,9 @@ function get_ops($mysqli, $op){
     $n = 0;
     foreach ($categories as $group) {
         $checked ='';
-        if($op == $n)
-            $checked == "selected=\"selected\"";
+        if($op == $group['UID']){
+            $checked = 'selected="selected"';
+        }
         if($categories[$n]!= NULL && $categories[$n]['canprint']== true){
             echo "<option value=\"".$categories[$n]['UID']."\" $checked>".$categories[$n]['UID']." | ".$categories[$n]['username']."</option>";
         }
@@ -391,7 +442,7 @@ function get_ops($mysqli, $op){
     }            
 }
 function get_printer($mysqli,$printer){
-    $query = "SELECT * FROM `printer` WHERE `status` = 1";
+    $query = "SELECT * FROM `printer` WHERE `status` <=2";
     if ($stmt = $mysqli->query($query))
     {   
         $n =0;
@@ -409,10 +460,35 @@ function get_printer($mysqli,$printer){
         if($printer == $n)
             $checked == "selected";
         if($categories[$n]!= NULL){
-            echo "<option value=\"".$n."\" $checked>".$categories[$n]['printername']." | &#8709 ".$categories[$n]['nozzle']." | ".$categories[$n]['owner']."</option>";
+            echo "<option value=\"".$categories[$n]['PrID']."\" $checked>".$categories[$n]['printername']." | &#8709 ".$categories[$n]['nozzle']." | ".$categories[$n]['owner']."</option>";
         }
         $n++;           
     }            
+}
+
+function badgegroup($name,$heading = true) {
+    switch ($name) {
+        case "Member":
+            $return = '<span class="badge badge-warning">'.$name.'</span>';
+            break;
+        case "Mainframe":
+            $return = '<span class="badge badge-dark">'.$name.'</span>';
+            break;
+        case "Operator":
+            $return = '<span class="badge badge-success">'.$name.'</span>';
+            break;
+        case "External":
+            $return = '<span class="badge badge-danger">'.$name.'</span>';
+            break;
+        default:
+            $return = $name;
+            break;
+        
+    }
+    if($heading){
+        $return = '<h6>'.$return.'</h6>';
+    }
+    return $return;   
 }
 function get_filament($mysqli, $filament){
     $query = "SELECT * FROM `filament` WHERE `weight` != 0";

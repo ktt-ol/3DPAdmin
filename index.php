@@ -1,11 +1,12 @@
-<?php require 'php/sessions.php'; require_once './version.php';?>
-<!doctype html>
 <?php 
+    require 'php/sessions.php'; 
+    require_once './version.php';
     include_once 'php/functions.php';    
     $site = @$_GET['s'];  
     if($site == NULL || $site == 'dashboard')
         $site = 'dashboard';
 ?>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -27,6 +28,7 @@
       </div>
     </nav>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <?php errhandle(@$_GET);?>
     <?php include chksite($site);?>
     </main>
   </div>
@@ -34,5 +36,6 @@
 <script src="jquery/jquery-3.3.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="js/bootstrap2-toggle.min.js" type="text/javascript"></script>
+<script src="js/usercontent.js" type="text/javascript"></script>
 </body>
 </html>

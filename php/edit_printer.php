@@ -3,10 +3,9 @@ include 'config.php';
 include 'functions.php';
 include 'sessions.php';
 if (login_check($mysqli) != true){   $url = "Location: /index.php?s=e403";header($url);} 
-if (chk_rights($mysqli,OP_OP) != true){$url = "Location: /index.php?s=e403";header($url);}
+if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header($url);}
 
 $ID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
 $PID = filter_input(INPUT_POST, 'PrID-'.$ID, FILTER_SANITIZE_NUMBER_INT);
 $printername = (filter_input(INPUT_POST, 'printername-'.$ID, FILTER_SANITIZE_STRING));
 $owner = filter_input(INPUT_POST, 'owner-'.$PID, FILTER_SANITIZE_STRING);

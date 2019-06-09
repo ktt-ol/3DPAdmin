@@ -10,47 +10,67 @@ if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header(
         @$filament = $_GET['f'];
         @$printer = $_GET['pr'];
         @$descriptopn = $_GET['d'];
-    }  
+    } 
+    if(!isset($_GET['pc'])){
+        $pricecat = usergrp($_SESSION['user']);
+    }
+if(isset($_GET['tag'])){@$tag = $_GET['tag'];}
 ?>
 <legend>3D-Druck eintragen</legend>
 <div>
-<form action="<?php echo '/php/';?>send_newprint.php" method="post" class="form-horizontal">
+<nav class="nav nav-pills flex-column flex-sm-row">
+    <a class="flex-sm-fill text-sm-center nav-link <?php if($tag=="extern"){echo 'active bg-danger';} ?>" href="/index.php?s=newprint&tag=extern">Extern/Member</a>
+    <a class="flex-sm-fill text-sm-center nav-link <?php if($tag=="self"){echo 'active bg-danger';} ?>" href="/index.php?s=newprint&tag=self">Eigendruck</a>
+    <a class="flex-sm-fill text-sm-center nav-link <?php if($tag=="credit"){echo 'active bg-danger';} ?>" href="/index.php?s=newprint&tag=credit">Guthabendruck</a>
+</nav> 
+</div>
+<br/>
+<div>
+<form action="<?php echo '/php/';?>send_newprint.php<?php if($tag=="credit"){echo '?creditprint=1';} ?>" method="post" class="form-horizontal">
 <fieldset>
 
 <div class="form-group">
     <label class="col-md-4 control-label" for="costomer">Eigent&uuml;mer</label>  
   <div class="col-md-4">
-  <input id="customer" name="customer" type="text" placeholder="ID_USERNAME" <?php if(isset($_GET)){ echo 'value="'.$customer.'"';} ?> class="form-control input-md" required="">
+  <?php if($tag=="self"){?>
+    <input type="texst" disabled="" id="customer" name="customer" class="form-control input-md" value="<?php echo $_SESSION['user'];?>"/>
+  <?php }else{?>
+    <input id="customer" name="customer" type="text" placeholder="ID_USERNAME" <?php if(isset($_GET)){ echo 'value="'.$customer.'"';}?> class="form-control input-md" required="">
+  <?php };?>
   </div>
 </div>
 
 <div class="form-group">
   <label class="col-md-4 control-label" for="operator">Operator</label>
   <div class="col-md-4">
-    <select id="operator" name="operator" class="form-control">
-    <?php get_ops($mysqli,$operator) ?>
+    <?php if($tag=="self"||$tag=="credit"){?>
+      <select id="operator" disabled="" name="operator" class="form-control" required="">
+    <?php }else{?>
+        <select id="operator" name="operator" class="form-control" required="">
+    <?php };?>   
+    <?php get_ops($mysqli,$_SESSION['uid']); ?>
     </select>
   </div>
 </div>
 
 <div class="form-group">
-  <label class="col-md-4 control-label" for="pricecat">Kategorie</label>
+  <label class="col-md-4 control-label" for="pricecat" required="">Kategorie</label>
   <div class="col-md-4">
-  <?php get_category($mysqli,$pricecat);?>
+  <?php if($tag=="self"||$tag=="credit"){get_category($mysqli,$pricecat,1);}else{get_category($mysqli,$pricecat);}?>  
   </div>
 </div>
 
 <div class="form-group">
-  <label class="col-md-4 control-label" for="weight">Gewicht in Gramm</label>  
+  <label class="col-md-4 control-label" for="weight" >Gewicht in Gramm</label>  
   <div class="col-md-4">
-  <input id="weight" name="weight" type="text" placeholder="1000" <?php if(isset($_GET)){ echo 'value="'.$weight.'"';} ?> class="form-control input-md" required="">
+  <input id="weight" name="weight" type="text" required="" placeholder="1000" <?php if(isset($_GET)){ echo 'value="'.$weight.'"';} ?> class="form-control input-md" required="">
   </div>
 </div>
 
 <div class="form-group">
   <label class="col-md-4 control-label" for="printer">Drucker</label>
   <div class="col-md-4">
-    <select id="printer" name="printer" class="form-control">
+    <select id="printer" name="printer" class="form-control" required="">
     <?php get_printer($mysqli, $printer) ?>
     </select>
   </div>
@@ -59,7 +79,7 @@ if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header(
 <div class="form-group">
     <label class="col-md-4 control-label" for="filament">Filament<br/>ID | Weight left | Color | Diameter | Owner | Pricemultiplicator</label>
   <div class="col-md-4">
-    <select id="filament" name="filament" class="form-control">
+    <select id="filament" name="filament" class="form-control" required="">
     <?php get_filament($mysqli, $filament)?>
     </select>
   </div>
@@ -68,7 +88,7 @@ if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header(
 <div class="form-group">
   <label class="col-md-4 control-label" for="description">Beschreibung</label>
   <div class="col-md-4">                     
-    <textarea class="form-control" id="description" name="description" required=""><?php if(isset($_GET)){ echo $descriptopn;} ?> </textarea>
+    <textarea class="form-control" id="description" name="description"><?php if(isset($_GET)){ echo $descriptopn;} ?> </textarea>
   </div>
 </div>
 
