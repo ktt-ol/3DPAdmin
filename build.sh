@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "##############################"
-echo "######### BULIT 3DPA #########"
+echo "######### BUILT 3DPA #########"
 echo "##############################"
 
 VERSION=$(git describe --always --abbrev=8)
