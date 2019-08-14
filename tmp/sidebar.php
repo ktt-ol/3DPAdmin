@@ -102,9 +102,4 @@ Dashboard
             Buildtime: <br/> <?php echo $buildtime ?>
         </a>  
     </li>
-    <li class="nav-item">
-        <a class="nav-link alert-dark" href="">
-            ahu
-        </a>  
-    </li>
 </ul>
