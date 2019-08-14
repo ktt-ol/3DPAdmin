@@ -50,11 +50,13 @@ class prints{
         // Output:  bool
         //
         
-        $updatevalue = $this->filter($value)*$this->filter($__MULTIPLICATOR);
+        $updatevalue = $value*$this->filter($__MULTIPLICATOR);
+        
         if($value>0){
             $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
         }elseif($value<=0){
-            $query ="UPDATE credit SET value = value - $updatevalue WHERE userid = '$uid'";
+            $query ="UPDATE credit SET value = value + $updatevalue WHERE userid = '$uid'";
+            
         }
         if (mysqli_query($mysqli,$query))
         {   
@@ -223,7 +225,7 @@ class prints{
                 ////////////////////////////////////////////
                 // Remove Credits from the Operators-Account   
                 $uid = $this->get_userid($data['operator']);
-                if($this->update_balance($mysqli,$uid,$data['weight'],$this->get_multiplier($data['filament']))&& 
+                if($this->update_balance($mysqli,$uid,(0-$data['weight']),$this->get_multiplier($data['filament']))&& 
                         $this->update_user_lastprint($mysqli,$uid) &&
                         $this->update_filament($mysqli,$data['filament'],$data['weight']))
                 {
@@ -256,7 +258,6 @@ class prints{
         }
     }
 }
-
 if (isset($_POST['submit'])){
     $print = new prints;
     if(isset($_GET['creditprint']) && $print->filter(@$_GET['creditprint'])==true){
@@ -267,12 +268,12 @@ if (isset($_POST['submit'])){
         $creditprint=0;
     }
     $print->save_print($mysqli,$_POST,$creditprint);
-    
+   
 } elseif (isset($_POST['calc'])){
     $prints = new prints;
     $price = $prints->get_price($_POST);
     $data = $prints->get_print($_POST);
-    if(isset($_GET['creditprint']) && $prints->filter(@$_GET['creditprint'])==true){
+    if(isset($_GET['creditprint']) && $prints->filter(@$_GET['creditprint'])==1){
         $url = "/index.php?s=creditprint&p=$price&c=".$data['customer']."&op=".$data['operator']."&w=".$data['weight']."&pc=".$data['pricecat']."&f=".$data['filament']."&pr=".$data['printer']."&d=".$data['description'];    
     }
     else

@@ -396,14 +396,17 @@ function get_category($mysqli, $cat, $block = 0 ){
     foreach ($categories as $group) {
         $checked ='';
         if($cat == $group['RID']){
-            $checked = "checked=\"\"";
+            $checked = "checked=\"checked\"";
+            
         }
         if($categories[$n]!= NULL && $group['name'] != "NOT_DEFINED" && $group['name'] != "Operator-Admin" && $group['name'] != "Administrator"){
             if($block){
-                echo "<label for=\"radios-$n\">"
-                . "<input disabled=\"\" type=\"radio\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" $checked />"
+                if($checked=="checked=\"checked\""){
+                     echo "<label for=\"radios-$n\">"
+                . "<input type=\"hidden\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" />"
                 . " ".badgegroup($group['name'],0)." (".$group['pricepergramm']." ct/g)"
                 . "</label></br>";
+                }
             }else{
                 echo "<label for=\"radios-$n\">"
                 . "<input type=\"radio\" name=\"pricecat\" id=\"radios-$n\" value=\"".$group['RID']."\" $checked />"

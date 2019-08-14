@@ -108,7 +108,7 @@ function all_get_user($mysqli){
                 <td>'.$row['username'].'</td>
                 <td>'.$row['value'].' g</td>
                 <td>'.$history[$row['UID']]['weightsum'].' g</td>
-                <td>'.$history[$row['UID']]['printcount'].' g</td>
+                <td>'.$history[$row['UID']]['printcount'].'</td>
                 <td>'.$rank.'</td>
                 <td>'.$activ.'</td>
                 <td>'.$row['opedby'].'</td>
@@ -120,7 +120,6 @@ function all_get_user($mysqli){
     return $n+1;
 }
 ?>
-
 <table id="tablePreview" class="table">
   <thead>
     <tr>

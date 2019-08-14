@@ -1,4 +1,4 @@
-<?php
+    <?php
 if (login_check($mysqli) != true){  $url = "Location: /index.php?s=e403";header($url);} 
 if (chk_rights($mysqli,OP) != true){$url = "Location: /index.php?s=e403";header($url);} 
     if(isset($_GET['p'])){        
@@ -26,16 +26,15 @@ if(isset($_GET['tag'])){@$tag = $_GET['tag'];}
 </div>
 <br/>
 <div>
-<form action="<?php echo '/php/';?>send_newprint.php<?php if($tag=="credit"){echo '?creditprint=1';} ?>" method="post" class="form-horizontal">
+<form action="<?php echo '/php/';?>send_newprint.php<?php if($tag=="credit" || $tag=="self"){echo '?creditprint=1';} ?>" method="post" class="form-horizontal">
 <fieldset>
-
 <div class="form-group">
     <label class="col-md-4 control-label" for="costomer">Eigent&uuml;mer</label>  
   <div class="col-md-4">
   <?php if($tag=="self"){?>
-    <input type="texst" disabled="" id="customer" name="customer" class="form-control input-md" value="<?php echo $_SESSION['user'];?>"/>
+    <input type="text" disabled="" id="customer" name="customer" class="form-control input-md" value="<?php echo $_SESSION['user'];?>"/>
   <?php }else{?>
-    <input id="customer" name="customer" type="text" placeholder="ID_USERNAME" <?php if(isset($_GET)){ echo 'value="'.$customer.'"';}?> class="form-control input-md" required="">
+    <input id="customer" name="customer" type="text" placeholder="<?php echo $_SESSION['user'];?>" <?php if(isset($_GET)){ echo 'value="'.$customer.'"';}?> class="form-control input-md" required="">
   <?php };?>
   </div>
 </div>

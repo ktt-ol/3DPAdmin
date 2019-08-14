@@ -31,6 +31,11 @@ Dashboard
     </a>
   </li>
   <li class="nav-item">   
+      <a class="nav-link" href="/index.php?s=newprint&tag=self">
+      Eigendruck
+    </a>
+  </li>
+  <li class="nav-item">   
       <a class="nav-link" href="/index.php?s=newprint&tag=credit">
       Guthaben 3D-Druck
     </a>
@@ -93,6 +98,11 @@ Dashboard
     <li class="nav-item">
         <a class="nav-link alert-dark" href="">
             Software-Version: <br/><?php echo $version?>
+        </a>  
+    </li>
+    <li class="nav-item">
+        <a class="nav-link alert-dark" href="">
+            ahu
         </a>  
     </li>
 </ul>
