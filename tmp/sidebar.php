@@ -92,7 +92,6 @@ Dashboard
   </li>
 <?php endif;?>
   <hr />
-
 </ul>
 <ul class="nav flex-column justify-content-end">
     <li class="nav-item">

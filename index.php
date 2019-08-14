@@ -1,4 +1,4 @@
-<?php 
+<?php
     require 'php/sessions.php'; 
     require_once './version.php';
     include_once 'php/functions.php';    
