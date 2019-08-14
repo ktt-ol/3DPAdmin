@@ -97,7 +97,9 @@ Dashboard
 <ul class="nav flex-column justify-content-end">
     <li class="nav-item">
         <a class="nav-link alert-dark" href="">
-            Software-Version: <br/><?php echo $version?>
+            Software-Version: <br/><?php echo $version?><br/>
+            GIT-Version: <br/><?php echo $gitversion?><br/>
+            Buildtime: <br/> <?php echo $buildtime ?>
         </a>  
     </li>
     <li class="nav-item">
