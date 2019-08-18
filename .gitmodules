@@ -1,0 +1,3 @@
+[submodule "lib/madeleine"]
+	path = lib/madeleine
+	url = https://github.com/JinJunho/Madeleine.js.git
