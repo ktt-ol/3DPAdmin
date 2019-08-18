@@ -3,6 +3,12 @@
 <a class="nav-link active" href="/index.php">
 Dashboard 
 </a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/index.php?s=requestprint">
+Druckanfrage 
+</a>
+</li>
 
 <?php if(login_check($mysqli) == true) :?>
   
@@ -102,3 +108,5 @@ Dashboard
         </a>  
     </li>
 </ul>
+
+
